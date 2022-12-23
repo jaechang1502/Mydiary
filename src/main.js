@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import "moment/locale/ko";
 
 const Main = () => {
+  let navigate = useNavigate();
   const [myList, setMyList] = useState([]);
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("Diary"));
@@ -15,7 +16,13 @@ const Main = () => {
       {myList &&
         myList.map((x) => {
           return (
-            <div className="bg-white rounded-lg p-3 m-3 " key={x.id}>
+            <div
+              className="bg-white rounded-lg p-3 m-3 "
+              key={x.id}
+              onClick={() => {
+                navigate(`/write/${x.id}`);
+              }}
+            >
               <h2 className="font-extrabold text-xl mb-2">
                 {moment(x.createTime).format("YYYY년 MMMM Do dddd LT")}
               </h2>

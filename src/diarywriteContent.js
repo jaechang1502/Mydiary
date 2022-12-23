@@ -1,18 +1,21 @@
 import { useState } from "react";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const DiaryWriteContent = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const diary = localStorage.getItem("Diary");
+  let data = JSON.parse(diary);
+  let { id } = useParams();
+  let result = data.find((x) => {
+    return x.id === Number(id);
+  });
+  const [title, setTitle] = useState(result.title);
+  const [content, setContent] = useState(result.content);
   /**
   다이어리 완료 버튼
   @localstorage  타이틀 내용 생성된시간 수정시간 마지막업데이트한 날짜 
   */
   const clickDiaryCompleted = () => {
-    let diary = localStorage.getItem("Diary");
-    let data = JSON.parse(diary);
-
     if (data === null) {
       data = [];
     }
@@ -53,7 +56,13 @@ const DiaryWriteContent = () => {
         className="mt-4 pl-2 w-full resize-none rounded h-64"
       ></textarea>
       <div className="flex justify-between mt-4">
-        <button className="bg-orange-400 hover:bg-orange-500 font-bold py-1 px-2 rounded text-white">
+        <button
+          className="bg-orange-400 hover:bg-orange-500 font-bold py-1 px-2 rounded text-white"
+          onClick={() => {
+            setTitle("");
+            setContent("");
+          }}
+        >
           Delete
         </button>
         <button

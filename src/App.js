@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Diary from "./diarywriteContent";
 import Main from "./main.js";
 
@@ -15,7 +15,7 @@ function App() {
         {/* router 설정  */}
         <Routes>
           <Route path="/" element={<Main />}></Route>
-          <Route path="/write" element={<Diary />}></Route>
+          <Route path="/write/:id" element={<Diary />}></Route>
         </Routes>
       </div>
     </div>
