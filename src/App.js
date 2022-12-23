@@ -15,7 +15,7 @@ function App() {
         {/* router 설정  */}
         <Routes>
           <Route path="/" element={<Main />}></Route>
-          <Route path="/write/:id" element={<Diary />}></Route>
+          <Route path="/write" element={<Diary />}></Route>
         </Routes>
       </div>
     </div>

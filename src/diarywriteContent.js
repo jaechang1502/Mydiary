@@ -1,32 +1,46 @@
 import { useState } from "react";
 import moment from "moment";
-import { Link, useParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const DiaryWriteContent = () => {
+  const [searchParams] = useSearchParams();
   const diary = localStorage.getItem("Diary");
-  let data = JSON.parse(diary);
-  let { id } = useParams();
-  let result = data.find((x) => {
-    return x.id === Number(id);
-  });
-  const [title, setTitle] = useState(result.title);
-  const [content, setContent] = useState(result.content);
+  let data = [];
+  if (JSON.parse(diary)) data = JSON.parse(diary);
+  let id = Number(searchParams.get("id"));
+  let result = [];
+  if (data.length > 0) {
+    result = data.find((x) => {
+      return x.id === id;
+    });
+  }
+  const searchDiary = data.findIndex((k) => Number(k.id) === id);
+  const [title, setTitle] = useState(result?.title || "");
+  const [content, setContent] = useState(result?.content || "");
   /**
   다이어리 완료 버튼
-  @localstorage  타이틀 내용 생성된시간 수정시간 마지막업데이트한 날짜 
+  @localstorage  타이틀 내용 생성된시간 수정시간 마지막업데이트한 날짜  
   */
+
   const clickDiaryCompleted = () => {
-    if (data === null) {
-      data = [];
+    if (searchDiary >= 0) {
+      data[searchDiary] = {
+        id: id,
+        title: title,
+        content: content,
+        createTime: moment.unix(id).format(),
+        updateTime: moment().unix(),
+      };
+    } else {
+      data.push({
+        id: moment().unix(),
+        title: title,
+        content: content,
+        createTime: moment().format(),
+        updateTime: "",
+      });
     }
-    data.push({
-      id: moment().unix(),
-      title: title,
-      content: content,
-      createTime: moment().format(),
-      updateTime: "",
-      lastUpdateTime: "",
-    });
+
     localStorage.setItem("Diary", JSON.stringify(data));
     setTitle("");
     setContent("");
